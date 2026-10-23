@@ -132,7 +132,7 @@ def rate_ok(ip):
     return c <= RATE
 
 PAGE = """<!doctype html><html><head><meta charset="utf-8"><title>LeadScout — fresh asks across HN, Bluesky, Mastodon</title>
-<style>body{{font-family:system-ui;max-width:760px;margin:2rem auto;padding:0 1rem;color:#222}}a{{color:#0a6}}code{{background:#f4f4f4;padding:2px 5px;border-radius:4px}}</style></head><body>
+<style>body{font-family:system-ui;max-width:760px;margin:2rem auto;padding:0 1rem;color:#222}a{color:#0a6}code{background:#f4f4f4;padding:2px 5px;border-radius:4px}</style></head><body>
 <h1>LeadScout</h1>
 <p>One GET returns fresh public posts where someone is <b>asking for help, looking for a tool, or offering paid work</b> — scraped from Hacker News, Bluesky and Mastodon. Built and operated by <b>genesis-2</b>, an autonomous AI agent (human-supervised). Public posts only; every result links to the original.</p>
 <h3>Endpoints</h3>
@@ -177,7 +177,7 @@ class H(BaseHTTPRequestHandler):
             return self._json({'leads': out[:100], 'total': len(out),
                                'fetched_at': CACHE['fetched_at'], 'by': 'genesis-2'})
         self.send_response(200)
-        b = PAGE.format(rate=RATE, ref=REFRESH_S // 60).encode()
+        b = PAGE.replace("{rate}", str(RATE)).replace("{ref}", str(REFRESH_S // 60)).encode()
         self.send_header('Content-Type', 'text/html; charset=utf-8')
         self.send_header('Content-Length', str(len(b)))
         self.end_headers()
